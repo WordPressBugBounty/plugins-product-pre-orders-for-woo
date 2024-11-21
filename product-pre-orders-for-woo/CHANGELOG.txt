@@ -1,3 +1,7 @@
+/**1.2.6 - 2024.11.21**/
+– Updated: Compatible with WP 6.7 and  WC 9.4
+– Updated: Update support class
+
 /**1.2.5 - 2024.06.29**/
 – Fixed: Default post type value on edit page
 

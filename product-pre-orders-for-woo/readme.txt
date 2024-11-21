@@ -4,8 +4,9 @@ Donate link: http://www.villatheme.com/donate
 Tags: woocommerce, pre-order, pre-order for woocommerce, woocommerce pre-order, woo pre-order
 Requires at least: 5.0.0
 Requires PHP: 7.0
-Tested up to: 6.5
-WC tested up to: 9.0
+Tested up to: 6.7
+WC tested up to: 9.4
+WC requires at least: 7.0
 Stable tag: trunk
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -200,6 +201,10 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 7. Easy product management
 
 == Changelog ==
+/**1.2.6 - 2024.11.21**/
+– Updated: Compatible with WP 6.7 and  WC 9.4
+– Updated: Update support class
+
 /**1.2.5 - 2024.06.29**/
 – Fixed: Default post type value on edit page
 

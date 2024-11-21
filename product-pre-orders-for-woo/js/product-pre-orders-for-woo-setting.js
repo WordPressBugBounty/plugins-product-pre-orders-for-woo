@@ -8,30 +8,29 @@ jQuery(document).ready(function ($) {
     * Check box pre order variable product
     */
     jQuery(function ($) {
-        if ($('#product-type').val() == 'simple') {
-            $('input#simple_preorder').on('change', function () {
-                show_and_hide_panel();
-            });
+        $('input#simple_preorder').on('change', function () {
+            show_and_hide_panel();
+        });
 
-            function show_and_hide_panel() {
-                var is_pre_order = $('input#simple_preorder:checked').length;
+        function show_and_hide_panel() {
+            var is_pre_order = $('input#simple_preorder:checked').length;
 
-                var hide_classes = '.hide_if_downloadable, .hide_if_pre_order';
-                var show_classes = '.show_if_downloadable, .show_if_pre_order';
+            var hide_classes = '.hide_if_downloadable, .hide_if_pre_order';
+            var show_classes = '.show_if_downloadable, .show_if_pre_order';
 
-                $(hide_classes).show();
-                $(show_classes).hide();
-                if (is_pre_order) {
-                    $('.show_if_pre_order').show();
-                } else {
-                    $("li.general_tab").find('a').trigger("click");
-                }
-                if (is_pre_order) {
-                    $('.hide_if_pre_order').hide();
-                }
+            $(hide_classes).show();
+            $(show_classes).hide();
+            if (is_pre_order) {
+                $('.show_if_pre_order').show();
+            } else {
+                $("li.general_tab").find('a').trigger("click");
             }
-
-            show_and_hide_panel()
+            if (is_pre_order) {
+                $('.hide_if_pre_order').hide();
+            }
+        }
+        if ($('#product-type').val() === 'simple') {
+            show_and_hide_panel();
         }
     });
 

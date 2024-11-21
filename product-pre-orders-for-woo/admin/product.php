@@ -88,7 +88,7 @@ class WPRO_WOO_PRE_ORDER_Admin_Product {
     public function add_my_custom_product_data_tab( $product_data_tabs ) {
         $product_data_tabs['pre-order-tab'] = array(
             'label'  => esc_html__( 'Pre-Order', 'product-pre-orders-for-woo' ),
-            'class'  => array( 'show_if_pre_order', 'hidden' ),
+            'class'  => array( 'show_if_pre_order', 'hidden', 'show_if_simple' ),
             'target' => 'wpro_pre_order',
         );
         

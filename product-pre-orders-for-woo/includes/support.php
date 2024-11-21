@@ -7,23 +7,24 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 
 	/**
 	 * Class VillaTheme_Support
-	 * 1.1.12
+	 * 1.1.14
 	 */
 	class VillaTheme_Support {
 		protected $plugin_base_name;
 		protected $ads_data;
-		protected $version = '1.1.12';
+		protected $version = '1.1.14';
 		protected $data = [];
 
 		public function __construct( $data ) {
 			$this->data               = array();
-			$this->data['support']    = $data['support'];
-			$this->data['docs']       = $data['docs'];
-			$this->data['review']     = $data['review'];
-			$this->data['css_url']    = $data['css'];
-			$this->data['images_url'] = $data['image'];
-			$this->data['slug']       = $data['slug'];
-			$this->data['menu_slug']  = $data['menu_slug'];
+			$this->data['support']    = $data['support']??'';
+			$this->data['docs']       = $data['docs']??'';
+			$this->data['review']     = $data['review']??'';
+			$this->data['css_url']    = $data['css']??'';
+			$this->data['images_url'] = $data['image']??'';
+			$this->data['slug']       = $data['slug']??'';
+			$this->data['deactivate_id']       = $data['deactivate_id']??'';
+			$this->data['menu_slug']  = $data['menu_slug']??'';
 			$this->data['version']    = isset( $data['version'] ) ? $data['version'] : '1.0.0';
 			$this->data['pro_url']    = isset( $data['pro_url'] ) ? $data['pro_url'] : '';
 			$this->data['survey_url'] = isset( $data['survey_url'] ) ? $data['survey_url'] : '';
@@ -107,7 +108,12 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 				'status' => 'error',
 				'data'   => '',
 			);
-			include_once ABSPATH . '/wp-admin/includes/plugin-install.php';
+			if ( ! function_exists( 'plugins_api' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+			}
+			if ( ! function_exists( 'plugins_api' ) ) {
+				return $return;
+			}
 			foreach (
 				array(
 					'woo-multi-currency',
@@ -194,7 +200,7 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 					$ads   = '';
 					if ( ! $feeds ) {
 						$request_data = $this->wp_remote_get();
-						if ( $request_data['status'] === 'success' ) {
+						if ( isset($request_data['status']) && $request_data['status'] === 'success' ) {
 							$ads = $request_data['data'];
 						}
 						set_transient( 'villatheme_ads', $ads, DAY_IN_SECONDS );
@@ -285,16 +291,16 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 				return;
 			}
 
-			if ( wp_verify_nonce( $_villatheme_nonce, $this->data['slug'] . '_dismiss_notices' ) ) {
-				update_option( $this->data['slug'] . '_dismiss_notices', 1 );
+			if ( wp_verify_nonce( $_villatheme_nonce, 'villatheme_'.$this->data['slug'] . '_dismiss_notices' ) ) {
+				update_option( 'villatheme_'.$this->data['slug'] . '_dismiss_notices', 1 );
 			}
-			if ( wp_verify_nonce( $_villatheme_nonce, $this->data['slug'] . '_hide_notices' ) ) {
-				set_transient( $this->data['slug'] . $this->data['version'] . '_hide_notices', 1, 2592000 );
+			if ( wp_verify_nonce( $_villatheme_nonce, 'villatheme_'.$this->data['slug'] . '_hide_notices' ) ) {
+				set_transient( 'villatheme_'.$this->data['slug'] . $this->data['version'] . '_hide_notices', 1, 2592000 );
 			}
-			if ( wp_verify_nonce( $_villatheme_nonce, $this->data['slug'] . '_wp_reviewed' ) ) {
-				set_transient( $this->data['slug'] . $this->data['version'] . '_hide_notices', 1, 2592000 );
-				update_option( $this->data['slug'] . '_wp_reviewed', 1 );
-				wp_safe_redirect( $this->data['review'] );
+			if ( wp_verify_nonce( $_villatheme_nonce, 'villatheme_'.$this->data['slug'] . '_wp_reviewed' ) ) {
+				set_transient( 'villatheme_'.$this->data['slug'] . $this->data['version'] . '_hide_notices', 1, 2592000 );
+				update_option( 'villatheme_'.$this->data['slug'] . '_wp_reviewed', 1 );
+				wp_safe_redirect( esc_url_raw($this->data['review']) );
 				exit();
 			}
 		}
@@ -303,18 +309,18 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 		 * Show review WordPress
 		 */
 		public function review_notice() {
-			if ( get_option( $this->data['slug'] . '_dismiss_notices', 0 ) ) {
+			if ( get_option( 'villatheme_'.$this->data['slug'] . '_dismiss_notices', 0 ) ) {
 				return;
 			}
-			if ( get_transient( $this->data['slug'] . $this->data['version'] . '_hide_notices' ) ) {
+			if ( get_transient( 'villatheme_'.$this->data['slug'] . $this->data['version'] . '_hide_notices' ) ) {
 				return;
 			}
 			$name         = $this->get_plugin_name();
-			$check_review = get_option( $this->data['slug'] . '_wp_reviewed', 0 );
-			$check_start  = get_option( $this->data['slug'] . '_start_use', 0 );
+			$check_review = get_option( 'villatheme_'.$this->data['slug'] . '_wp_reviewed', 0 );
+			$check_start  = get_option( 'villatheme_'.$this->data['slug'] . '_start_use', 0 );
 			if ( ! $check_start ) {
-				update_option( $this->data['slug'] . '_start_use', 1 );
-				set_transient( $this->data['slug'] . $this->data['version'] . '_hide_notices', 1, 259200 );
+				update_option( 'villatheme_'.$this->data['slug'] . '_start_use', 1 );
+				set_transient( 'villatheme_'.$this->data['slug'] . $this->data['version'] . '_hide_notices', 1, 259200 );
 
 				return;
 			}
@@ -332,18 +338,18 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
                             <p><?php echo esc_html( 'Hi there! You\'ve been using ' ) . '<strong>' . esc_html( $name ) . '</strong>' . esc_html( ' on your site for a few days - I hope it\'s been helpful. Would you want get more features?' ) ?></p>
 						<?php } ?>
                         <p>
-                            <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array() ), $this->data['slug'] . '_hide_notices', '_villatheme_nonce' ) ); ?>"
+                            <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array() ), 'villatheme_'.$this->data['slug'] . '_hide_notices', '_villatheme_nonce' ) ); ?>"
                                class="button"><?php echo esc_html( 'Thanks, later' ) ?></a>
 							<?php if ( ! $check_review ) { ?>
                                 <button class="button button-primary"><?php echo esc_html( 'Rate Now' ) ?></button>
-								<?php wp_nonce_field( $this->data['slug'] . '_wp_reviewed', '_villatheme_nonce' ) ?>
+								<?php wp_nonce_field( 'villatheme_'.$this->data['slug'] . '_wp_reviewed', '_villatheme_nonce' ) ?>
 							<?php } ?>
 							<?php if ( $this->data['pro_url'] ) { ?>
                                 <a target="_blank" href="<?php echo esc_url( $this->data['pro_url'] ); ?>"
                                    class="button button-primary"><?php echo esc_html( 'Try Premium Version' ) ?></a>
 							<?php } ?>
                             <a target="_self"
-                               href="<?php echo esc_url( wp_nonce_url( add_query_arg( array() ), $this->data['slug'] . '_dismiss_notices', '_villatheme_nonce' ) ); ?>"
+                               href="<?php echo esc_url( wp_nonce_url( add_query_arg( array() ), 'villatheme_'.$this->data['slug'] . '_dismiss_notices', '_villatheme_nonce' ) ); ?>"
                                class="button notice-dismiss vi-button-dismiss"><?php echo esc_html( 'Dismiss' ) ?></a>
                         </p>
                     </form>
@@ -403,12 +409,12 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 
 			if ( wp_verify_nonce( $_villatheme_nonce, 'villatheme_hide_toolbar' ) ) {
 				update_option( 'villatheme_hide_admin_toolbar', time() );
-				wp_safe_redirect( esc_url_raw( remove_query_arg( array( '_villatheme_nonce' ) ) ) );
+				wp_safe_redirect( (esc_url_raw( remove_query_arg( array( '_villatheme_nonce' ) ) )) );
 				exit();
 			}
 			if ( wp_verify_nonce( $_villatheme_nonce, 'villatheme_show_toolbar' ) ) {
 				delete_option( 'villatheme_hide_admin_toolbar' );
-				wp_safe_redirect( esc_url_raw( remove_query_arg( array( '_villatheme_nonce' ) ) ) );
+				wp_safe_redirect( (esc_url_raw( remove_query_arg( array( '_villatheme_nonce' ) ) )) );
 				exit();
 			}
 			$hide_notice = isset( $_GET['villatheme-hide-notice'] ) ? sanitize_text_field( wp_unslash( $_GET['villatheme-hide-notice'] ) ) : '';
@@ -447,11 +453,11 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
             <div class="villatheme-dashboard updated">
                 <div class="villatheme-content">
 					<?php
-					if ( $this->ads_data['heading'] ) { ?>
+					if ( !empty($this->ads_data['heading']) ) { ?>
                         <h3><?php echo esc_html( $this->ads_data['heading'] ) ?></h3>
 						<?php
 					}
-					if ( $this->ads_data['description'] ) { ?>
+					if ( !empty($this->ads_data['description'] )) { ?>
                         <p><?php echo esc_html( $this->ads_data['description'] ) ?></p>
 						<?php
 					}
@@ -469,7 +475,7 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 						) ), 'hide_notices', '_villatheme_nonce' ) ); ?>"
                            class="button"><?php echo esc_html( 'Thanks, later.' ) ?></a>
 						<?php
-						if ( $this->ads_data['link'] ) { ?>
+						if ( !empty($this->ads_data['link']) ) { ?>
                             <a target="_blank" href="<?php echo esc_url( $this->ads_data['link'] ); ?>"
                                class="button button-primary"><?php echo esc_html( 'Get Your Gift' ) ?></a>
 							<?php
@@ -479,7 +485,7 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
                 </div>
             </div>
 			<?php
-			echo wp_kses_post( apply_filters( 'form_ads_data', ob_get_clean() ) );
+			echo wp_kses_post( apply_filters( 'villatheme_form_ads_data', ob_get_clean() ) );
 		}
 
 		public function get_ads_data() {
@@ -495,7 +501,7 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 			$called = get_transient( 'villatheme_called' );
 			if ( ! $data && ! $called ) {
 				$request_data = $this->wp_remote_get( true );
-				if ( $request_data['status'] === 'success' ) {
+				if ( isset($request_data['status']) && $request_data['status'] === 'success' ) {
 					$data = json_decode( $request_data['data'], true );
 				}
 				set_transient( 'villatheme_notices', $data, DAY_IN_SECONDS );
@@ -627,11 +633,11 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 				}
 				wp_add_inline_script( 'villatheme-support', "(function ($) {
                     $(function () {
-                        $(document).on('click', '#the-list a#deactivate-". $this->data['slug'] ."', function (e) {
+                        $(document).on('click', '#the-list a#deactivate-". esc_html($this->data['deactivate_id']?:$this->data['slug']) ."', function (e) {
                             e.preventDefault();
                             ViDeactivate.modal.addClass('modal-active');
                             ViDeactivate.deactivateLink = $(this).attr('href');
-                            ViDeactivate.surveyUrl = '".$this->data['survey_url'] ."';
+                            ViDeactivate.surveyUrl = '".esc_html($this->data['survey_url']) ."';
                             ViDeactivate.modal.find('a.dont-bother-me').attr('href', ViDeactivate.deactivateLink).css('float', 'left');
                         });
                     });
@@ -713,7 +719,7 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 			if ( ! $feeds ) {
 				try {
 					$request_data = $this->wp_remote_get( false );
-					if ( $request_data['status'] === 'success' ) {
+					if ( isset($request_data['status']) && $request_data['status'] === 'success' ) {
 						$ads = $request_data['data'];
 					}
 					set_transient( 'villatheme_ads', $ads, DAY_IN_SECONDS );
@@ -795,7 +801,6 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 		}
 
 		private function get_plugin_name() {
-			include_once ABSPATH . '/wp-admin/includes/plugin.php';
 			$plugins = get_plugins();
 
 			return isset( $plugins[ $this->plugin_base_name ]['Title'] ) ? $plugins[ $this->plugin_base_name ]['Title'] : ucwords( str_replace( '-', ' ', $this->data['slug'] ) );
@@ -921,92 +926,83 @@ if ( ! class_exists( 'VillaTheme_Require_Environment' ) ) {
 		}
 
 		protected function check( $args ) {
-			if ( ! function_exists( 'install_plugin_install_status' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+
+			if ( ! empty( $args['php_version'] ) && !is_php_version_compatible( $args['php_version'] )) {
+				$this->notices[] = sprintf( "PHP version at least %s.", esc_html( $args['php_version'] ) );
 			}
 
-			if ( ! function_exists( 'is_plugin_active' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			if ( ! empty( $args['wp_version'] ) && !is_wp_version_compatible( $args['wp_version'] )) {
+				$this->notices[] = sprintf( "WordPress version at least %s.", esc_html( $args['wp_version'] ) );
 			}
-
-			if ( ! empty( $args['php_version'] ) ) {
-				$compatible_php = is_php_version_compatible( $args['php_version'] );
-				if ( ! $compatible_php ) {
-					$this->notices[] = sprintf( "PHP version at least %s.", esc_html( $args['php_version'] ) );
-				}
-			}
-
-			if ( ! empty( $args['wp_version'] ) ) {
-				$compatible_wp = is_wp_version_compatible( $args['wp_version'] );
-				if ( ! $compatible_wp ) {
-					$this->notices[] = sprintf( "WordPress version at least %s.", esc_html( $args['wp_version'] ) );
-				}
-			}
-
 			if ( ! empty( $args['require_plugins'] ) ) {
+				$default_headers = array(
+					'Version'         => 'Version',
+				);
+				$active_plugins = [];
+				$tmp = get_option( 'active_plugins' ,[]);
+				if (is_multisite()){
+					$tmp += array_keys(get_site_option( 'active_sitewide_plugins', [] ));
+				}
+				if (!empty($tmp)){
+					foreach ($tmp as $v){
+						$info = explode('/',$v);
+						if (empty($info[1])){
+							$info= explode(DIRECTORY_SEPARATOR, $v);
+						}
+						if (empty($info[1])){
+							continue;
+						}
+						$active_plugins[$info[0]] = $v;
+					}
+				}
+				$plugins_dir = WP_PLUGIN_DIR;
 				foreach ( $args['require_plugins'] as $plugin ) {
-					if ( empty( $plugin['version'] ) ) {
-						$plugin['version'] = '';
-					}
-
-					$status              = install_plugin_install_status( $plugin );
-					$require_plugin_name = $plugin['name'] ?? '';
-
-					if (!empty($plugin['requires_php']) && !is_php_version_compatible( $plugin['requires_php'] )){
+					if (!is_array($plugin) || empty($plugin)){
 						continue;
 					}
-
-					if (!empty($plugin['requires']) && !is_wp_version_compatible( $plugin['requires'] )){
-						continue;
+					$plugin_name = $plugin['name'] ?? '';
+					$plugin_slug = $plugin['slug'] ?? '';
+					$plugin_file = $plugin['file'] ?? '';
+					$plugin_version = $plugin['version']?? $plugin['required_version'] ?? '';
+					if (!$plugin_version && $plugin_slug ==='woocommerce'){
+						$plugin_version = $args['wc_version']??'';
 					}
-
-					switch ( $status['status'] ) {
-
-						case 'install':
-
+					$plugin['version'] = $plugin_version;
+					$is_installed = true;
+					if (empty($active_plugins[$plugin_slug])){
+						if (!is_dir($plugins_dir. DIRECTORY_SEPARATOR . $plugin_slug )) {
+							$is_installed = false;
 							$this->notices[] = sprintf( "%s to be installed. <br><a href='%s' target='_blank' class='button button-primary' style='vertical-align: middle; margin-top: 5px;'>Install %s</a>",
-								esc_html( $require_plugin_name ),
-								esc_url( current_user_can('install_plugins') ? wp_nonce_url( network_admin_url( "update.php?action=install-plugin&plugin={$plugin_slug}" ), "install-plugin_{$plugin_slug}" ): '#' ),
-								esc_html( $require_plugin_name ) );
+								esc_html( $plugin_name ),
+								esc_url( current_user_can( 'install_plugins' ) ? wp_nonce_url( network_admin_url( "update.php?action=install-plugin&plugin={$plugin_slug}" ), "install-plugin_{$plugin_slug}" ) : '#' ),
+								esc_html( $plugin_name ) );
+						}else{
+							$msg = sprintf('%s is installed and activated.', esc_html( $plugin_name ));
+							if (current_user_can( 'activate_plugin', $plugin_file) ) {
+								$activate_url = add_query_arg(
+									[
+										'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $plugin_file ),
+										'action'   => 'activate',
+										'plugin'   => $plugin_file,
+									],
+									self_admin_url( 'plugins.php' )
+								);
 
-							break;
-
-						default:
-
-							if ( ! is_plugin_active( $status['file'] ) ) {
-								$msg = sprintf('%s is installed and activated.', esc_html( $require_plugin_name ));
-								if (current_user_can( 'activate_plugin', $status['file'] ) ) {
-									$activate_url = add_query_arg(
-										[
-											'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $status['file'] ),
-											'action'   => 'activate',
-											'plugin'   => $status['file'],
-										],
-										self_admin_url( 'plugins.php' )
-									);
-
-									$msg .= sprintf( " <br> <a href='%s' target='_blank' class='button button-primary' style='vertical-align: middle; margin-top: 5px;'>Active %s</a>",
-										esc_url( $activate_url ),
-										esc_html( $require_plugin_name ) );
-								}
-								$this->notices[] = $msg;
-
+								$msg .= sprintf( " <br> <a href='%s' target='_blank' class='button button-primary' style='vertical-align: middle; margin-top: 5px;'>Active %s</a>",
+									esc_url( $activate_url ),
+									esc_html( $plugin_name ) );
 							}
-
-							if ( ! empty( $plugin['required_version'] ) && !empty( $status['version'] ) ) {
-								if ( ! version_compare( $status['version'], $plugin['required_version'], '>=' ) ) {
-									$this->notices[] = sprintf( "%s version at least %s.", esc_html( $require_plugin_name ) ,esc_html( $plugin['required_version'] ) );
-								}
-							}
-
-							if ( $plugin['slug'] == 'woocommerce' && ! empty( $args['wc_version'] ) && is_plugin_active( $status['file'] ) ) {
-								$wc_current_version = get_option( 'woocommerce_version' );
-								if ( ! version_compare( $wc_current_version, $args['wc_version'], '>=' ) ) {
-									$this->notices[] = sprintf( "WooCommerce version at least %s.", esc_html( $args['wc_version'] ) );
-								}
-							}
-
-							break;
+							$this->notices[] = $msg;
+						}
+					}else{
+						$plugin_file = $active_plugins[$plugin_slug];
+					}
+					if ($plugin_version && $is_installed && $plugin_file){
+						$plugin_file = $plugins_dir.DIRECTORY_SEPARATOR.$plugin_file;
+						$plugin_info = get_file_data($plugin_file, $default_headers, 'plugin' );
+						if ( !empty( $plugin_info['Version'] ) && ! version_compare( $plugin_info['Version'], $plugin_version, '>=' )) {
+							$this->notices[] = sprintf( "%s version at least %s.", esc_html( $plugin_name ) ,esc_html( $plugin_version ) );
+						}
 					}
 				}
 			}

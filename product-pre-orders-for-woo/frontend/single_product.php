@@ -417,8 +417,9 @@ class WPRO_WOO_PRE_ORDER_Frontend_single_product {
 					$post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
 				}
 				$post_time = str_replace( "{availability_time}", $time_format, $post_date );
+
 				if ( ! empty( $pre_date ) ) {
-					if ( $date_now < $time_total ) {
+					if ( $date_now < $time_total && ! empty( $post_time ) ) {
 						?>
                         <div class="wpro-pre-order-shop-page">
 							<?php
