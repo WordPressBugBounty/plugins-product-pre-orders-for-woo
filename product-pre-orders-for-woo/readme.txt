@@ -5,7 +5,7 @@ Tags: woocommerce, pre-order, pre-order for woocommerce, woocommerce pre-order, 
 Requires at least: 5.0.0
 Requires PHP: 7.0
 Tested up to: 6.7
-WC tested up to: 9.4
+WC tested up to: 9.6.1
 WC requires at least: 7.0
 Stable tag: trunk
 License: GPL v2 or later
@@ -89,7 +89,7 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 
 - [Project Page](https://villatheme.com)
 - [Documentation](http://docs.villatheme.com/?item=woocommerce-product-pre-orders)
-- [Report Bugs/Issues](https://villatheme.com/supports)
+- [Report Bugs/Issues](https://villatheme.com/knowledge-base/security-is-our-priority/)
 
 ### MAY BE YOU NEED
 [SUBRE – Product Subscription for WooCommerce](https://bit.ly/subre-product-subscription-for-woo): Convert WooCommerce simple products(physical or downloadable/virtual) to subscription products and allow recurring payments
@@ -201,6 +201,11 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 7. Easy product management
 
 == Changelog ==
+/**1.2.7 - 2025.02.10**/
+– Fixed: Fixed the pre-order product label in notification emails.
+– Updated: Compatible with WC 9.6.1
+– Updated: Update support class
+
 /**1.2.6 - 2024.11.21**/
 – Updated: Compatible with WP 6.7 and  WC 9.4
 – Updated: Update support class

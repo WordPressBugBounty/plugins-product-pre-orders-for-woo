@@ -281,6 +281,7 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 			return;
 		}
 		$get_option = get_option( 'pre_order_setting_default' );
+
 		$date_now   = strtotime( date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) );
 		$gmt_offdet = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
 		if ( $product->is_type( 'simple' ) ) {
@@ -293,8 +294,14 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 				$date_format = date_i18n( get_option( 'date_format' ), $time_total );
 				$pre_time    = get_post_meta( $product_id, '_wpro_time', true );
 				$time_format = date_i18n( get_option( 'time_format' ), strtotime( $pre_time ) - strtotime( 'TODAY' ) );
-				$post_date   = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
-				$post_time   = str_replace( "{availability_time}", $time_format, $post_date );
+
+                $date_label    = get_post_meta( $product_id, '_wpro_date_label', true );
+                if ( $date_label ) {
+                    $post_date = str_replace( "{availability_date}", $date_format, $date_label );
+                } else {
+                    $post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
+                }
+                $post_time   = str_replace( "{availability_time}", $time_format, $post_date );
 				if ( ! empty( $pre_date ) ) {
 					if ( $date_now < $time_total ) {
 						$output .= '<br>' . esc_html( $post_time );
@@ -315,7 +322,12 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 				$pre_time    = get_post_meta( $variation_id, '_wpro_time_variable', true );
 				$time_format = date_i18n( get_option( 'time_format' ), strtotime( $pre_time ) - strtotime( 'TODAY' ) );
 				$time_total  = strtotime( $date_time );
-				$post_date   = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
+                $date_label    = get_post_meta( $variation_id, '_wpro_date_label_variable', true );
+                if ( $date_label ) {
+                    $post_date = str_replace( "{availability_date}", $date_format, $date_label );
+                } else {
+                    $post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
+                }
 				$post_time   = str_replace( "{availability_time}", $time_format, $post_date );
 				if ( ! empty( $pre_date ) ) {
 					if ( $date_now < $time_total ) {
