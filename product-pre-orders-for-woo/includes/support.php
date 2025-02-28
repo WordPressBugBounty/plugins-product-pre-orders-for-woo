@@ -935,73 +935,22 @@ if ( ! class_exists( 'VillaTheme_Require_Environment' ) ) {
 				$this->notices[] = sprintf( "WordPress version at least %s.", esc_html( $args['wp_version'] ) );
 			}
 			if ( ! empty( $args['require_plugins'] ) ) {
-				$default_headers = array(
-					'Version'         => 'Version',
-				);
-				$active_plugins = [];
-				$tmp = get_option( 'active_plugins' ,[]);
-				if (is_multisite()){
-					$tmp += array_keys(get_site_option( 'active_sitewide_plugins', [] ));
-				}
-				if (!empty($tmp)){
-					foreach ($tmp as $v){
-						$info = explode('/',$v);
-						if (empty($info[1])){
-							$info= explode(DIRECTORY_SEPARATOR, $v);
-						}
-						if (empty($info[1])){
-							continue;
-						}
-						$active_plugins[$info[0]] = $v;
-					}
-				}
 				foreach ( $args['require_plugins'] as $plugin ) {
-					if (!is_array($plugin) || empty($plugin)){
+					if (!is_array($plugin) || empty($plugin) || empty($plugin['defined_version'])){
 						continue;
 					}
 					$plugin_name = $plugin['name'] ?? '';
 					$plugin_slug = $plugin['slug'] ?? '';
-					$plugin_file = $plugin['file'] ?? '';
 					$plugin_version = $plugin['version']?? $plugin['required_version'] ?? '';
 					if (!$plugin_version && $plugin_slug ==='woocommerce'){
 						$plugin_version = $args['wc_version']??'';
 					}
 					$plugin['version'] = $plugin_version;
-					$is_installed = true;
-					if (empty($active_plugins[$plugin_slug])){
-						if (!is_dir(ABSPATH.'wp-content/plugins/'.$plugin_file)) {
-							$is_installed = false;
-							$this->notices[] = sprintf( "%s to be installed. <br><a href='%s' target='_blank' class='button button-primary' style='vertical-align: middle; margin-top: 5px;'>Install %s</a>",
-								esc_html( $plugin_name ),
-								esc_url( current_user_can( 'install_plugins' ) ? wp_nonce_url( network_admin_url( "update.php?action=install-plugin&plugin={$plugin_slug}" ), "install-plugin_{$plugin_slug}" ) : '#' ),
-								esc_html( $plugin_name ) );
-						}else{
-							$msg = sprintf('%s is installed and activated.', esc_html( $plugin_name ));
-							if (current_user_can( 'activate_plugin', $plugin_file) ) {
-								$activate_url = add_query_arg(
-									[
-										'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $plugin_file ),
-										'action'   => 'activate',
-										'plugin'   => $plugin_file,
-									],
-									self_admin_url( 'plugins.php' )
-								);
-
-								$msg .= sprintf( " <br> <a href='%s' target='_blank' class='button button-primary' style='vertical-align: middle; margin-top: 5px;'>Active %s</a>",
-									esc_url( $activate_url ),
-									esc_html( $plugin_name ) );
-							}
-							$this->notices[] = $msg;
-						}
-					}else{
-						$plugin_file = $active_plugins[$plugin_slug];
-					}
-					if ($plugin_version && $is_installed && $plugin_file){
-						$plugin_file = ABSPATH.'wp-content/plugins/'.$plugin_file;
-						$plugin_info = get_file_data($plugin_file, $default_headers, 'plugin' );
-						if ( !empty( $plugin_info['Version'] ) && ! version_compare( $plugin_info['Version'], $plugin_version, '>=' )) {
-							$this->notices[] = sprintf( "%s version at least %s.", esc_html( $plugin_name ) ,esc_html( $plugin_version ) );
-						}
+					if (!defined($plugin['defined_version'])){
+						$msg = sprintf('%s is <a href="%s" target="_blank">installed and activated.</a>', esc_html( $plugin_name ), network_admin_url( "plugin-install.php?s={$plugin_slug}&tab=search&type=term" ) );
+						$this->notices[] = $msg;
+					}elseif ($plugin_version &&   ! version_compare( constant($plugin['defined_version']), $plugin_version, '>=' )) {
+						$this->notices[] = sprintf( "%s version at least %s.", esc_html( $plugin_name ) ,esc_html( $plugin_version ) );
 					}
 				}
 			}

@@ -1,3 +1,7 @@
+/**1.2.8 - 2025.02.28**/
+– Updated: Compatible with WC 9.7
+– Updated: Update support class
+
 /**1.2.7 - 2025.02.10**/
 – Fixed: Fixed the pre-order product label in notification emails.
 – Updated: Compatible with WC 9.6.1

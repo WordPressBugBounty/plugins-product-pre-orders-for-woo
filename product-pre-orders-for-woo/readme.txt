@@ -5,7 +5,7 @@ Tags: woocommerce, pre-order, pre-order for woocommerce, woocommerce pre-order, 
 Requires at least: 5.0.0
 Requires PHP: 7.0
 Tested up to: 6.7
-WC tested up to: 9.6.1
+WC tested up to: 9.7
 WC requires at least: 7.0
 Stable tag: trunk
 License: GPL v2 or later
@@ -16,7 +16,7 @@ Easily set up your store to accept orders for unreleased products, allowing cust
 == Description ==
 Product Pre-Orders for WooCommerce is an effective tool to sell pre-order products on your WooCommerce website. When Pre-orders feature is available for a product, customers can shop their wanted products on your website even they know that products have not currently had in stock. Indeed, it is very easy for you to manage and sell based on practical customers’ need.
 Product Pre-Orders for WooCommerce offers with sufficient features to sell pre-orders for products on WooCommerce website. It includes setting an optional date and time when the pre order will be available, customize pre-order charge for each product, email to customers who pre-ordered a product, customize Pre-order text button and color, availability date and time text…
-[Documents](https://docs.villatheme.com/woocommerce-product-pre-orders/ "Documents") | [Facebook group](https://www.facebook.com/groups/villatheme "VillaTheme")
+[Try the Demo](https://demo2.villatheme.com/pre-orders "Demo Product Pre-Orders for WooCommerce") | [Documents](https://docs.villatheme.com/woocommerce-product-pre-orders/ "Documents") | [Facebook group](https://www.facebook.com/groups/villatheme "VillaTheme")
 
 ###Preview Product Pre-Orders for WooCommerce
 [youtube https://www.youtube.com/watch?v=fK6P-gbc_cI&t=77s]
@@ -201,6 +201,10 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 7. Easy product management
 
 == Changelog ==
+/**1.2.8 - 2025.02.28**/
+– Updated: Compatible with WC 9.7
+– Updated: Update support class
+
 /**1.2.7 - 2025.02.10**/
 – Fixed: Fixed the pre-order product label in notification emails.
 – Updated: Compatible with WC 9.6.1
