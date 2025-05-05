@@ -21,22 +21,26 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 				$this,
 				'pre_order_add_text_order_detail_admin'
 			), 10, 3 );
-			add_filter( 'manage_edit-shop_order_columns', array( $this, 'custom_pre_order_column' ), 20 );
-			add_action( 'manage_shop_order_posts_custom_column', array(
-				$this,
-				'custom_orders_list_column_content'
-			), 20, 2 );
+			$hpos_custom_table = ( get_option( 'woocommerce_feature_custom_order_tables_enabled' ) === 'yes' || get_option( 'woocommerce_custom_orders_table_enabled' ) === 'yes' );
+			if ( $hpos_custom_table ) {
+				add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'custom_pre_order_column' ) );
+				add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'custom_orders_list_column_content' ), 10, 2 );
+			} else {
+				add_filter( 'manage_edit-shop_order_columns', array( $this, 'custom_pre_order_column' ), 20 );
+				add_action( 'manage_shop_order_posts_custom_column', array( $this, 'custom_orders_list_column_content' ), 20, 2 );
+			}
 			add_action( 'woocommerce_product_stock_status_options', array( $this, 'pre_order_custom_filter' ) );
 			add_filter( 'posts_clauses', array( $this, 'custom_filter_pre_order_product_admin' ) );
 			add_filter( 'the_posts', array( $this, 'custom_filter_pre_order_variable' ) );
 		}
 	}
-    // phpcs:disable WordPress.Security.NonceVerification.Recommended
+
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	public function custom_filter_pre_order_variable( $posts ) {
 		global $pagenow;
 		$return = array();
 		$ids    = array();
-        $type   = '';
+		$type   = '';
 		if ( isset( $_GET['post_type'] ) ) {
 			$type = sanitize_text_field( $_GET['post_type'] );
 		}
@@ -78,7 +82,7 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 
 		return $label;
 	}
-    // phpcs:enable WordPress.Security.NonceVerification.Recommended
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	/** Add column tab Order Admin
 	 *
@@ -149,16 +153,34 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 			$variation_id = $item->get_variation_id();
 			$product_type = $product->get_type();
 			$is_pre_order = '';
+			$date_time    = '';
 			switch ( $product_type ) {
 				case 'simple' :
+
 					$is_pre_order = get_post_meta( $product_id, '_simple_preorder', true );
+
+					$pre_date   = get_post_meta( $product_id, '_wpro_date', true );
+					$gmt_offdet = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+					$time_total = $gmt_offdet + $pre_date;
+					$date_time  = date_i18n( 'Y-m-d H:i:s', $time_total );
+
 					break;
+
 				case 'variation' :
+
 					$is_pre_order = get_post_meta( $variation_id, '_wpro_variable_is_preorder', true );
+
+					$pre_date   = get_post_meta( $variation_id, '_wpro_date_variable', true );
+					$gmt_offdet = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+					$time_total = $gmt_offdet + $pre_date;
+					$date_time  = date_i18n( 'Y-m-d H:i:s', $time_total );
+
+					break;
+				default:
 					break;
 			}
 			if ( $is_pre_order === 'yes' ) {
-				echo esc_html( apply_filters( 'PPOFW_FILTER_text_pre_order_line_items', 'Pre-Order Product' ) );
+				echo esc_html( apply_filters( 'PPOFW_FILTER_text_pre_order_line_items', 'Pre-Order Product' ) . ':' . $date_time );
 			}
 		}
 
@@ -254,7 +276,7 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 								?>
                                 <div class="wpro-pre-order-all-product-no-set">
 									<?php
-                                    /* translators: %s: Preorder date*/
+									/* translators: %s: Preorder date*/
 									printf( esc_html__( ' %s : No date set', 'product-pre-orders-for-woo' ), esc_html( $variation_attr ) );
 									?>
                                 </div>
@@ -295,13 +317,13 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 				$pre_time    = get_post_meta( $product_id, '_wpro_time', true );
 				$time_format = date_i18n( get_option( 'time_format' ), strtotime( $pre_time ) - strtotime( 'TODAY' ) );
 
-                $date_label    = get_post_meta( $product_id, '_wpro_date_label', true );
-                if ( $date_label ) {
-                    $post_date = str_replace( "{availability_date}", $date_format, $date_label );
-                } else {
-                    $post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
-                }
-                $post_time   = str_replace( "{availability_time}", $time_format, $post_date );
+				$date_label = get_post_meta( $product_id, '_wpro_date_label', true );
+				if ( $date_label ) {
+					$post_date = str_replace( "{availability_date}", $date_format, $date_label );
+				} else {
+					$post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
+				}
+				$post_time = str_replace( "{availability_time}", $time_format, $post_date );
 				if ( ! empty( $pre_date ) ) {
 					if ( $date_now < $time_total ) {
 						$output .= '<br>' . esc_html( $post_time );
@@ -322,13 +344,13 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 				$pre_time    = get_post_meta( $variation_id, '_wpro_time_variable', true );
 				$time_format = date_i18n( get_option( 'time_format' ), strtotime( $pre_time ) - strtotime( 'TODAY' ) );
 				$time_total  = strtotime( $date_time );
-                $date_label    = get_post_meta( $variation_id, '_wpro_date_label_variable', true );
-                if ( $date_label ) {
-                    $post_date = str_replace( "{availability_date}", $date_format, $date_label );
-                } else {
-                    $post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
-                }
-				$post_time   = str_replace( "{availability_time}", $time_format, $post_date );
+				$date_label  = get_post_meta( $variation_id, '_wpro_date_label_variable', true );
+				if ( $date_label ) {
+					$post_date = str_replace( "{availability_date}", $date_format, $date_label );
+				} else {
+					$post_date = str_replace( "{availability_date}", $date_format, $get_option['date_text'] );
+				}
+				$post_time = str_replace( "{availability_time}", $time_format, $post_date );
 				if ( ! empty( $pre_date ) ) {
 					if ( $date_now < $time_total ) {
 						$output .= '<br>' . esc_html( $post_time );

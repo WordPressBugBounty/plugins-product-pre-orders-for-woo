@@ -1,3 +1,8 @@
+/**1.2.9 - 2025.05.05**/
+– Updated: Compatible with WP 6.8.1 and WC 9.8.3
+– Updated: Update support class
+- Fixed: Fixed display the pre-order date in the order details for variables
+
 /**1.2.8 - 2025.02.28**/
 – Updated: Compatible with WC 9.7
 – Updated: Update support class

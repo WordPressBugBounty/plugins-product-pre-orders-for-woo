@@ -317,7 +317,7 @@ class WPRO_WOO_PRE_ORDER_Admin_Admin {
 			new VillaTheme_Support(
 				array(
 					'support'    => 'https://wordpress.org/support/plugin/product-pre-orders-for-woo/',
-					'docs'       => 'https://docs.villatheme.com/woocommerce-product-pre-orders/',
+					'docs'       => 'https://docs.villatheme.com/?item=product-pre-orders-for-woo',
 					'review'     => 'https://wordpress.org/support/plugin/product-pre-orders-for-woo/reviews/?rate=5#rate-response',
 					'pro_url'    => '',
 					'css'        => WPRO_WOO_PRE_ORDER_CSS,
