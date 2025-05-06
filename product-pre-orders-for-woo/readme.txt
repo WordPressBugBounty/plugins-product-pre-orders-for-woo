@@ -224,6 +224,9 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 10. Setup Pre-order for variable product
 
 == Changelog ==
+/**1.2.10 - 2025.05.06**/
+- Fixed: Fixed type mismatch error (int + string).
+
 /**1.2.9 - 2025.05.05**/
 – Updated: Compatible with WP 6.8.1 and WC 9.8.3
 – Updated: Update support class

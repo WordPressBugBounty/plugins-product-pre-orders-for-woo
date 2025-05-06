@@ -156,26 +156,19 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 			$date_time    = '';
 			switch ( $product_type ) {
 				case 'simple' :
-
-					$is_pre_order = get_post_meta( $product_id, '_simple_preorder', true );
-
-					$pre_date   = get_post_meta( $product_id, '_wpro_date', true );
-					$gmt_offdet = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
-					$time_total = $gmt_offdet + $pre_date;
-					$date_time  = date_i18n( 'Y-m-d H:i:s', $time_total );
-
-					break;
-
-				case 'variation' :
-
-					$is_pre_order = get_post_meta( $variation_id, '_wpro_variable_is_preorder', true );
-
-					$pre_date   = get_post_meta( $variation_id, '_wpro_date_variable', true );
-					$gmt_offdet = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
-					$time_total = $gmt_offdet + $pre_date;
-					$date_time  = date_i18n( 'Y-m-d H:i:s', $time_total );
-
-					break;
+                    $is_pre_order = get_post_meta( $product_id, '_simple_preorder', true );
+                    $pre_date = get_post_meta( $product_id, '_wpro_date', true );
+					$gmt_offdet    = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+					$time_total    = $gmt_offdet + (int) $pre_date;
+					$date_time = date_i18n( 'Y-m-d H:i:s', $time_total );
+                    break;
+                case 'variation' :
+                    $is_pre_order = get_post_meta( $variation_id, '_wpro_variable_is_preorder', true );
+                    $pre_date = get_post_meta( $variation_id, '_wpro_date_variable', true );
+					$gmt_offdet    = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+					$time_total    = $gmt_offdet + (int) $pre_date;
+					$date_time = date_i18n( 'Y-m-d H:i:s', $time_total );
+                    break;
 				default:
 					break;
 			}
