@@ -1,3 +1,8 @@
+/**1.2.11 - 2025.06.06**/
+- Fixed: Fixed Not unique table/alias
+– Updated: Compatible with WC 9.8.5
+– Updated: Update support class
+
 /**1.2.10 - 2025.05.06**/
 - Fixed: Fixed type mismatch error (int + string).
 

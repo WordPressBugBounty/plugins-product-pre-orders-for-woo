@@ -5,7 +5,7 @@ Tags: woocommerce, pre-order, pre-order for woocommerce, woocommerce pre-order, 
 Requires at least: 5.0.0
 Requires PHP: 7.0
 Tested up to: 6.8.1
-WC tested up to: 9.8.3
+WC tested up to: 9.8.5
 WC requires at least: 7.0
 Stable tag: trunk
 License: GPL v2 or later
@@ -224,6 +224,11 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 10. Setup Pre-order for variable product
 
 == Changelog ==
+/**1.2.11 - 2025.06.06**/
+- Fixed: Fixed Not unique table/alias
+– Updated: Compatible with WC 9.8.5
+– Updated: Update support class
+
 /**1.2.10 - 2025.05.06**/
 - Fixed: Fixed type mismatch error (int + string).
 

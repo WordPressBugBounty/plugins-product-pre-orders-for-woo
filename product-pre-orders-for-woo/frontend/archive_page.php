@@ -63,10 +63,18 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 
 	public function custom_filter_pre_order_product_admin( $args ) {
 		global $wpdb;
-		if ( ! empty( $_GET['stock_status'] ) ) {
+		/*if ( ! empty( $_GET['stock_status'] ) ) {
 			$args['where'] = str_replace( "AND {$wpdb->posts}.post_type = 'product'", " AND {$wpdb->posts}.post_type = 'product_variation' OR {$wpdb->posts}.post_type = 'product'", $args['where'] );
 			$args['where'] = " AND ( {$wpdb->postmeta}.meta_key = '_simple_preorder' AND {$wpdb->postmeta}.meta_value = 'yes' ) OR ( {$wpdb->postmeta}.meta_key = '_wpro_variable_is_preorder' AND {$wpdb->postmeta}.meta_value = 'yes' )" . $args['where'];
 			$args['join']  .= " INNER JOIN {$wpdb->postmeta}  ON ($wpdb->posts.ID = {$wpdb->postmeta}.post_id) ";
+		}*/
+		if ( ! empty( $_GET['stock_status'] ) ) {
+			$args['where'] = str_replace( "AND {$wpdb->posts}.post_type = 'product'", " AND ({$wpdb->posts}.post_type = 'product_variation' OR {$wpdb->posts}.post_type = 'product')", $args['where'] );
+
+			$args['join'] .= " INNER JOIN {$wpdb->postmeta} AS pm1 ON ($wpdb->posts.ID = pm1.post_id)";
+			$args['join'] .= " INNER JOIN {$wpdb->postmeta} AS pm2 ON ($wpdb->posts.ID = pm2.post_id)";
+
+			$args['where'] = " AND ( (pm1.meta_key = '_simple_preorder' AND pm1.meta_value = 'yes') OR (pm2.meta_key = '_wpro_variable_is_preorder' AND pm2.meta_value = 'yes') ) " . $args['where'];
 		}
 
 		return $args;
@@ -156,19 +164,19 @@ class WPRO_WOO_PRE_ORDER_Frontend_archive_page {
 			$date_time    = '';
 			switch ( $product_type ) {
 				case 'simple' :
-                    $is_pre_order = get_post_meta( $product_id, '_simple_preorder', true );
-                    $pre_date = get_post_meta( $product_id, '_wpro_date', true );
-					$gmt_offdet    = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
-					$time_total    = $gmt_offdet + (int) $pre_date;
-					$date_time = date_i18n( 'Y-m-d H:i:s', $time_total );
-                    break;
-                case 'variation' :
-                    $is_pre_order = get_post_meta( $variation_id, '_wpro_variable_is_preorder', true );
-                    $pre_date = get_post_meta( $variation_id, '_wpro_date_variable', true );
-					$gmt_offdet    = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
-					$time_total    = $gmt_offdet + (int) $pre_date;
-					$date_time = date_i18n( 'Y-m-d H:i:s', $time_total );
-                    break;
+					$is_pre_order = get_post_meta( $product_id, '_simple_preorder', true );
+					$pre_date     = get_post_meta( $product_id, '_wpro_date', true );
+					$gmt_offdet   = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+					$time_total   = $gmt_offdet + (int) $pre_date;
+					$date_time    = date_i18n( 'Y-m-d H:i:s', $time_total );
+					break;
+				case 'variation' :
+					$is_pre_order = get_post_meta( $variation_id, '_wpro_variable_is_preorder', true );
+					$pre_date     = get_post_meta( $variation_id, '_wpro_date_variable', true );
+					$gmt_offdet   = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+					$time_total   = $gmt_offdet + (int) $pre_date;
+					$date_time    = date_i18n( 'Y-m-d H:i:s', $time_total );
+					break;
 				default:
 					break;
 			}
