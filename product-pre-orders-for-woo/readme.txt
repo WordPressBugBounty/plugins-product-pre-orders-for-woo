@@ -4,8 +4,8 @@ Donate link: http://www.villatheme.com/donate
 Tags: woocommerce, pre-order, pre-order for woocommerce, woocommerce pre-order, woo pre-order
 Requires at least: 5.0.0
 Requires PHP: 7.0
-Tested up to: 6.8.1
-WC tested up to: 9.8.5
+Tested up to: 6.8.2
+WC tested up to: 10.0.3
 WC requires at least: 7.0
 Stable tag: trunk
 License: GPL v2 or later
@@ -224,6 +224,10 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 10. Setup Pre-order for variable product
 
 == Changelog ==
+/**1.2.12 - 2025.07.26**/
+– Updated: Compatible with WP 6.8.2 and WC 10.0.3
+– Updated: Update support class
+
 /**1.2.11 - 2025.06.06**/
 - Fixed: Fixed Not unique table/alias
 – Updated: Compatible with WC 9.8.5

@@ -7,12 +7,12 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 
 	/**
 	 * Class VillaTheme_Support
-	 * 1.1.16
+	 * 1.1.17
 	 */
 	class VillaTheme_Support {
 		protected $plugin_base_name;
 		protected $ads_data;
-		protected $version = '1.1.16';
+		protected $version = '1.1.17';
 		protected $data = [];
 
 		public function __construct( $data ) {
@@ -151,63 +151,68 @@ if ( ! class_exists( 'VillaTheme_Support' ) ) {
 
 			return $return;
 		}
-		public function plugin_information($args = array() ){
-			if ( is_array( $args ) ) {
-				$args = (object) $args;
-			}
-			if ( ! isset( $args->locale ) ) {
-				$args->locale = get_user_locale();
-			}
+        public function plugin_information($args = array() ){
+	        global $wp_version;
+	        $wp_version1 = $wp_version;
+            if (!$wp_version){
+	            $wp_version1 = '5.0';
+            }
+	        if ( is_array( $args ) ) {
+		        $args = (object) $args;
+	        }
+            if ( ! isset( $args->locale ) ) {
+		        $args->locale = get_user_locale();
+	        }
 
-			if ( ! isset( $args->wp_version ) ) {
-				$args->wp_version = substr( wp_get_wp_version(), 0, 3 ); // x.y
-			}
-			$url = 'https://api.wordpress.org/plugins/info/1.2/';
-			$url = add_query_arg(
-				array(
-					'action'  => 'plugin_information',
-					'request' => $args,
-				),
-				$url
-			);
-			$http_url = $url;
-			$ssl      = wp_http_supports( array( 'ssl' ) );
-			if ( $ssl ) {
-				$url = set_url_scheme( $url, 'https' );
-			}
-			$http_args = array(
-				'timeout'    => 15,
-				'user-agent' => 'WordPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
-			);
-			$request   = wp_remote_get( $url, $http_args );
-			if ( $ssl && is_wp_error( $request ) ) {
-				$request = wp_remote_get( $http_url, $http_args );
-			}
-			if ( is_wp_error( $request ) ) {
-				$res = new WP_Error(
-					'plugins_api_failed',
-					esc_html('Error'),
-					$request->get_error_message()
-				);
-			} else {
-				$res = json_decode( wp_remote_retrieve_body( $request ), true );
-				if ( is_array( $res ) ) {
-					// Object casting is required in order to match the info/1.0 format.
-					$res = (object) $res;
-				} elseif ( null === $res ) {
-					$res = new WP_Error(
-						'plugins_api_failed',
-						esc_html('Error'),
-						wp_remote_retrieve_body( $request )
-					);
-				}
+	        if ( ! isset( $args->wp_version ) ) {
+		        $args->wp_version = substr( $wp_version1, 0, 3 ); // x.y
+	        }
+	        $url = 'https://api.wordpress.org/plugins/info/1.2/';
+	        $url = add_query_arg(
+		        array(
+			        'action'  => 'plugin_information',
+			        'request' => $args,
+		        ),
+		        $url
+	        );
+	        $http_url = $url;
+	        $ssl      = wp_http_supports( array( 'ssl' ) );
+	        if ( $ssl ) {
+		        $url = set_url_scheme( $url, 'https' );
+	        }
+	        $http_args = array(
+		        'timeout'    => 15,
+		        'user-agent' => 'WordPress/' . $wp_version1 . '; ' . home_url( '/' ),
+	        );
+	        $request   = wp_remote_get( $url, $http_args );
+	        if ( $ssl && is_wp_error( $request ) ) {
+		        $request = wp_remote_get( $http_url, $http_args );
+	        }
+	        if ( is_wp_error( $request ) ) {
+		        $res = new WP_Error(
+			        'plugins_api_failed',
+			        esc_html('Error'),
+			        $request->get_error_message()
+		        );
+	        } else {
+		        $res = json_decode( wp_remote_retrieve_body( $request ), true );
+		        if ( is_array( $res ) ) {
+			        // Object casting is required in order to match the info/1.0 format.
+			        $res = (object) $res;
+		        } elseif ( null === $res ) {
+			        $res = new WP_Error(
+				        'plugins_api_failed',
+				        esc_html('Error'),
+				        wp_remote_retrieve_body( $request )
+			        );
+		        }
 
-				if ( isset( $res->error ) ) {
-					$res = new WP_Error( 'plugins_api_failed', $res->error );
-				}
-			}
-			return $res;
-		}
+		        if ( isset( $res->error ) ) {
+			        $res = new WP_Error( 'plugins_api_failed', $res->error );
+		        }
+	        }
+            return $res;
+        }
 
 		/**
 		 * Add Extensions page

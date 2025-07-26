@@ -3,7 +3,7 @@
  * Plugin Name: Product Pre-Orders for Woocommerce
  * Plugin URI: https://villatheme.com/extensions/woocommerce-product-pre-orders/
  * Description: Easily set up your store to accept orders for unreleased products, allowing customers to purchase items in advance.
- * Version: 1.2.11
+ * Version: 1.2.12
  * Author: VillaTheme
  * Author URI: https://villatheme.com
  * License: GPLv2
@@ -12,16 +12,16 @@
  * Requires Plugins: woocommerce
  * Text Domain: product-pre-orders-for-woo
  * Requires at least: 5.0
- * Tested up to: 6.8.1
+ * Tested up to: 6.8.2
  * WC requires at least: 7.0
- * WC tested up to: 9.8.5
+ * WC tested up to: 10.0.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WPRO_WOO_PRE_ORDER_VERSION', '1.2.11' );
+define( 'WPRO_WOO_PRE_ORDER_VERSION', '1.2.12' );
 define( 'WPRO_WOO_PRE_ORDER_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPRO_WOO_PRE_ORDER_URL', plugin_dir_url( __FILE__ ) );
 

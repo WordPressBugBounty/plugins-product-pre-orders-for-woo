@@ -1,3 +1,7 @@
+/**1.2.12 - 2025.07.26**/
+– Updated: Compatible with WP 6.8.2 and WC 10.0.3
+– Updated: Update support class
+
 /**1.2.11 - 2025.06.06**/
 - Fixed: Fixed Not unique table/alias
 – Updated: Compatible with WC 9.8.5
