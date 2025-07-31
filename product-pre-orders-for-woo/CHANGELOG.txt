@@ -1,3 +1,6 @@
+/**1.2.13 - 2025.07.31**/
+– Fixed:  Issue where filtering products by stock status returned no results in product admin page.
+
 /**1.2.12 - 2025.07.26**/
 – Updated: Compatible with WP 6.8.2 and WC 10.0.3
 – Updated: Update support class
