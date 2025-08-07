@@ -224,6 +224,9 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 10. Setup Pre-order for variable product
 
 == Changelog ==
+/**1.2.14 - 2025.08.07**/
+- Fixed: Resolved issue where WooCommerce "Downloadable Files" fields were hidden in product editor when Product Pre‑Orders plugin was active, even if pre-order was not enabled.
+
 /**1.2.13 - 2025.07.31**/
 – Fixed:  Issue where filtering products by stock status returned no results in product admin page.
 

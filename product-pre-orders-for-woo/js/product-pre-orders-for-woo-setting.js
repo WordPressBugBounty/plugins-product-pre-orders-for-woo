@@ -14,6 +14,7 @@ jQuery(document).ready(function ($) {
 
         function show_and_hide_panel() {
             var is_pre_order = $('input#simple_preorder:checked').length;
+            var is_downloadable = $("input#_downloadable:checked").length;
 
             var hide_classes = '.hide_if_downloadable, .hide_if_pre_order';
             var show_classes = '.show_if_downloadable, .show_if_pre_order';
@@ -22,8 +23,15 @@ jQuery(document).ready(function ($) {
             $(show_classes).hide();
             if (is_pre_order) {
                 $('.show_if_pre_order').show();
+                $("input#_downloadable").attr('disabled', true);
             } else {
                 $("li.general_tab").find('a').trigger("click");
+                $("input#_downloadable").attr('disabled', false);
+                if(is_downloadable){
+                    $('.show_if_downloadable').css('display', 'block');
+                }else{
+                    $('.show_if_downloadable').css('display', 'none');
+                }
             }
             if (is_pre_order) {
                 $('.hide_if_pre_order').hide();
