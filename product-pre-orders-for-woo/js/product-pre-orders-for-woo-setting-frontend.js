@@ -24,6 +24,13 @@ jQuery(document).ready(function ($) {
                 button.html(add_to_cart_text);
             });
 
+        if($('body').hasClass('theme-uncode') && $('body').hasClass('archive')){
+            let wpro_shop_text = $('.wpro-pre-order-shop-page');
+            let  product_item = wpro_shop_text.nextAll('.tmb').first();
+            let produt_inside = product_item.find('.t-inside .t-entry-text');
+            wpro_shop_text.css('margin-bottom', '0px');
+            produt_inside.prepend(wpro_shop_text);
+        }
     });
 });
 
