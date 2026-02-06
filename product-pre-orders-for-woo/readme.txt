@@ -1,4 +1,4 @@
-=== Product Pre-Orders for WooCommerce ===
+=== PRENA - Product Pre-Orders for WooCommerce ===
 Contributors: villatheme, mrt3vn
 Donate link: http://www.villatheme.com/donate
 Tags: woocommerce, pre-order, pre-order for woocommerce, woocommerce pre-order, woo pre-order
@@ -14,12 +14,12 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Easily set up your store to accept orders for unreleased products, allowing customers to purchase items in advance.
 
 == Description ==
-Product Pre-Orders for WooCommerce is an effective tool to sell pre-order products on your WooCommerce website. When Pre-orders feature is available for a product, customers can shop their wanted products on your website even they know that products have not currently had in stock. Indeed, it is very easy for you to manage and sell based on practical customers’ need.
-Product Pre-Orders for WooCommerce offers with sufficient features to sell pre-orders for products on WooCommerce website. It includes setting an optional date and time when the pre order will be available, customize pre-order charge for each product, email to customers who pre-ordered a product, customize Pre-order text button and color, availability date and time text…
-[Try the Demo](https://new2new.com/?item=product-pre-orders-for-woo "Demo Product Pre-Orders for WooCommerce") | [Documents](https://docs.villatheme.com/?item=product-pre-orders-for-woo "Documents") | [Facebook group](https://www.facebook.com/groups/villatheme "VillaTheme")
+PRENA - Product Pre-Orders for WooCommerce is an effective tool to sell pre-order products on your WooCommerce website. When Pre-orders feature is available for a product, customers can shop their wanted products on your website even they know that products have not currently had in stock. Indeed, it is very easy for you to manage and sell based on practical customers’ need.
+PRENA - Product Pre-Orders for WooCommerce offers with sufficient features to sell pre-orders for products on WooCommerce website. It includes setting an optional date and time when the pre order will be available, customize pre-order charge for each product, email to customers who pre-ordered a product, customize Pre-order text button and color, availability date and time text…
+[Try the Demo](https://new2new.com/?item=product-pre-orders-for-woo "Demo PRENA - Product Pre-Orders for WooCommerce") | [Documents](https://docs.villatheme.com/?item=product-pre-orders-for-woo "Documents") | [Facebook group](https://www.facebook.com/groups/villatheme "VillaTheme")
 
-###Preview Product Pre-Orders for WooCommerce
-[youtube https://www.youtube.com/watch?v=fK6P-gbc_cI&t=77s]
+###Preview PRENA - Product Pre-Orders for WooCommerce
+[youtube https://www.youtube.com/watch?v=cQpB7229xm8]
 
 ### Important Notice:
 - Plugin works based on WooCommerce plugin.
@@ -148,7 +148,7 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 
 [Product Size Chart For WooCommerce](https://wordpress.org/plugins/product-size-chart-for-woo)
 
-[Product Pre-Orders for WooCommerce](https://wordpress.org/plugins/product-pre-orders-for-woo)
+[PRENA - Product Pre-Orders for WooCommerce](https://wordpress.org/plugins/product-pre-orders-for-woo)
 
 [Checkout Upsell Funnel for WooCommerce](https://wordpress.org/plugins/checkout-upsell-funnel-for-woo)
 
@@ -224,6 +224,9 @@ There is a column in WooCommerce Order Admin Page that shows the orders having p
 10. Setup Pre-order for variable product
 
 == Changelog ==
+/**2.0.0 - 2025.10.17**/
+- Updated: Change name plugin from "Product Pre-Orders for WooCommerce" to "PRENA - Product Pre-Orders for WooCommerce"
+
 /**1.2.15 - 2025.09.05**/
 - Fixed: Compatible with uncode theme
 /**1.2.14 - 2025.08.07**/
